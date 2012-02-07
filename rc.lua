@@ -73,6 +73,23 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
 -- }}}
 
+-- set the desired pixel coordinates:
+local safeCoords = {x=0, y=0}
+-- Flag to tell Awesome whether to do this at startup.
+local moveMouseOnStartup = true
+
+-- Simple function to move the mouse to the coordinates set above.
+local function moveMouse(x_co, y_co)
+    mouse.coords({ x=x_co, y=y_co })
+end
+
+--   this is useful if you needed the mouse for something and now want it out of the way
+
+-- Optionally move the mouse when rc.lua is read (startup)
+if moveMouseOnStartup then
+    moveMouse(safeCoords.x, safeCoords.y)
+end
+
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
@@ -210,6 +227,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
+
+    -- Bind ''Meta4+Ctrl+m'' to move the mouse to the coordinates set above.
+    awful.key({ modkey, "Control"   }, "m", function () moveMouse(safeCoords.x, safeCoords.y) end),
 
     -- Prompt
     awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
