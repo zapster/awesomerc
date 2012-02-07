@@ -48,10 +48,28 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
-for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+if screen.count() == 1 then
+  -- single monitor stuff
+  tags = { 
+    names = { "main", "mail", "im", "chat", 5, 6, 7, 8, 9 },
+  }
+  for s = 1, screen.count() do
+      -- Each screen has its own tag table.
+      tags[s] = awful.tag(tags.names, s, layouts[1])
+  end
+else
+  local status_screen = 2
+  local main_screen = 1
+  -- multi monitor stuff
+  tags = {}
+  -- set "status" screen
+  tags[status_screen] = awful.tag({ "mail", "im", "chat", 4, 5, 6, 7, 8, 9 }, status_screen, layouts[1])
+  -- set "main" screen
+  tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, 9 }, main_screen, layouts[1])
+  for s = 3, screen.count() do
+      -- Each screen has its own tag table.
+      tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+  end
 end
 -- }}}
 
