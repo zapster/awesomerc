@@ -53,23 +53,29 @@ if screen.count() == 1 then
   tags = { 
     names = { "main", "mail", "im", "chat", 5, 6, 7, 8, 9 },
   }
-  for s = 1, screen.count() do
-      -- Each screen has its own tag table.
-      tags[s] = awful.tag(tags.names, s, layouts[1])
-  end
+  -- Each screen has its own tag table.
+  tags[1] = awful.tag(tags.names, 1, layouts[1])
+  tags.main = tags[1][1]
+  tags.mail = tags[1][2]
+  tags.im = tags[1][3]
+  tags.chat = tags[1][4]
 else
   local status_screen = 2
   local main_screen = 1
   -- multi monitor stuff
   tags = {}
   -- set "status" screen
-  tags[status_screen] = awful.tag({ "mail", "im", "chat", 4, 5, 6, 7, 8, 9 }, status_screen, layouts[1])
+  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", 5, 6, 7, 8, 9 }, status_screen, layouts[1])
   -- set "main" screen
   tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, 9 }, main_screen, layouts[1])
   for s = 3, screen.count() do
       -- Each screen has its own tag table.
       tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
   end
+  tags.main = tags[main_screen][1]
+  tags.mail = tags[status_screen][2]
+  tags.im = tags[status_screen][3]
+  tags.chat = tags[status_screen][4]
 end
 -- }}}
 
@@ -393,6 +399,17 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    -- set IM's to im tag
+    { rule = { class = "Skype" },
+      properties = { tag = tags.im } },
+    { rule = { class = "Contact List" },
+      properties = { tag = tags.im } },
+    -- email
+    { rule = { class = "Thunderbird" },
+      properties = { tag = tags.mail } },
+    -- char
+    { rule = { class = "irc" },
+      properties = { tag = tags.chat } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
