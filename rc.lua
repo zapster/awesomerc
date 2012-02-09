@@ -60,8 +60,13 @@ if screen.count() == 1 then
   tags.im = tags[1][3]
   tags.chat = tags[1][4]
 else
-  local status_screen = 2
-  local main_screen = 1
+  main_screen = 2
+  status_screen = 1
+
+  if screen[1].workarea.width > screen[2].workarea.width then
+    main_screen = 1
+    status_screen = 2
+  end
   -- multi monitor stuff
   tags = {}
   -- set "status" screen
