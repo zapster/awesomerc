@@ -486,6 +486,27 @@ globalkeys = awful.util.table.join(globalkeys,
         function ()
             awful.tag.viewonly(tags.music);
             awful.screen.focus(tags.music.screen)
+        end),
+    -- move clients to screen
+    awful.key({ modkey, "Shift" }, "F1",
+        function ()
+            awful.client.movetotag(tags.main);
+        end),
+    awful.key({ modkey, "Shift" }, "F2",
+        function ()
+            awful.client.movetotag(tags.mail);
+        end),
+    awful.key({ modkey, "Shift" }, "F3",
+        function ()
+            awful.client.movetotag(tags.im);
+        end),
+    awful.key({ modkey, "Shift" }, "F4",
+        function ()
+            awful.client.movetotag(tags.chat);
+        end),
+    awful.key({ modkey, "Shift" }, "F5",
+        function ()
+            awful.client.movetotag(tags.music);
         end)
 )
 -- Set keys
