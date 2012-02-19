@@ -385,6 +385,34 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
+-- Bind F# keys to the special purpose tags
+globalkeys = awful.util.table.join(globalkeys,
+    awful.key({ modkey }, "F1",
+        function ()
+            awful.tag.viewonly(tags.main);
+            awful.screen.focus(tags.main.screen)
+        end),
+    awful.key({ modkey }, "F2",
+        function ()
+            awful.tag.viewonly(tags.mail);
+            awful.screen.focus(tags.mail.screen)
+        end),
+    awful.key({ modkey }, "F3",
+        function ()
+            awful.tag.viewonly(tags.im);
+            awful.screen.focus(tags.im.screen)
+        end),
+    awful.key({ modkey }, "F4",
+        function ()
+            awful.tag.viewonly(tags.chat);
+            awful.screen.focus(tags.chat.screen)
+        end),
+    awful.key({ modkey }, "F5",
+        function ()
+            awful.tag.viewonly(tags.music);
+            awful.screen.focus(tags.music.screen)
+        end)
+)
 -- Set keys
 root.keys(globalkeys)
 -- }}}
@@ -412,8 +440,11 @@ awful.rules.rules = {
     -- email
     { rule = { class = "Thunderbird" },
       properties = { tag = tags.mail } },
-    -- char
+    -- chat
     { rule = { class = "irc" },
+      properties = { tag = tags.chat } },
+    -- music
+    { rule = { class = "GMPC" },
       properties = { tag = tags.chat } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
@@ -451,4 +482,5 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
 
