@@ -33,7 +33,7 @@ layouts =
 --    awful.layout.suit.floating,
     awful.layout.suit.tile,
 --    awful.layout.suit.tile.left,
---    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.bottom,
 --    awful.layout.suit.tile.top,
 --    awful.layout.suit.fair,
 --    awful.layout.suit.fair.horizontal,
@@ -48,6 +48,9 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
+main_screen = 1
+status_screen = 1
+
 if screen.count() == 1 then
   -- single monitor stuff
   tags = {
@@ -151,7 +154,48 @@ if moveMouseOnStartup then
     moveMouse(safeCoords.x, safeCoords.y)
 end
 
+-- {{{ Vicious Widgets
+
+require("vicious")
+
+-- CPU usage widget
+cpuwidget = awful.widget.graph()
+cpuwidget:set_width(50)
+cpuwidget:set_height(30)
+cpuwidget:set_background_color("#494B4F")
+cpuwidget:set_color("#FF5656")
+cpuwidget:set_gradient_colors({ "#FF5656", "#88A175", "#AECF96" })
+
+cpuwidget_t = awful.tooltip({ objects = { cpuwidget.widget },})
+
+-- Register CPU widget
+vicious.register(cpuwidget, vicious.widgets.cpu,
+                    function (widget, args)
+                        cpuwidget_t:set_text("CPU Usage: " .. args[1] .. "%")
+                        return args[1]
+                    end)
+
+-- Initialize widget
+mpdwidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(mpdwidget, vicious.widgets.mpd,
+    function (widget, args)
+        if args["{state}"] == "Stop" then
+            return " - "
+        else
+            return args["{Artist}"]..' - '.. args["{Title}"]
+        end
+    end, 10)
+
+-- }}}
+
 -- {{{ Wibox
+
+spacer = widget({type = "textbox"})
+separator = widget({type = "textbox"})
+spacer.text = " "
+separator.text = "|"
+
 -- Create a textclock widget
 mytextclock = awful.widget.textclock({ align = "right" })
 
@@ -216,6 +260,23 @@ for s = 1, screen.count() do
                                               return awful.widget.tasklist.label.currenttags(c, s)
                                           end, mytasklist.buttons)
 
+    local status_widgets = nil
+    if s == status_screen then
+      status_widgets = {
+          cpuwidget.widget,
+          spacer,
+          separator,
+          spacer,
+
+          mpdwidget.widget,
+          spacer,
+          separator,
+          spacer,
+
+          layout = awful.widget.layout.horizontal.rightleft
+        }
+    end
+
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
     -- Add widgets to the wibox - order matters
@@ -227,8 +288,16 @@ for s = 1, screen.count() do
             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
+        spacer,
+
         mytextclock,
-        s == 1 and mysystray or nil,
+        spacer,
+
+        s == main_screen and mysystray or nil,
+        s == main_screen and spacer or nil,
+
+        status_widgets,
+
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
