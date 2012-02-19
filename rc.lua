@@ -123,6 +123,14 @@ tags.music = tags[status_screen][5]
   table.insert(menu_items, { "open terminal", terminal, freedesktop.utils.lookup_icon({icon = 'terminal'}) })
   table.insert(menu_items, { "Debian", debian.menu.Debian_menu.Debian, freedesktop.utils.lookup_icon({ icon = 'debian-logo' }) })
 
+  mybrowsermenu = {
+    { "firefox default", "firefox -P default -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
+    { "firefox uni", "firefox -P uni -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
+    { "firefox epicopt", "firefox -P epicopt -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
+  }
+
+  table.insert(menu_items, { "Browser", mybrowsermenu, freedesktop.utils.lookup_icon({ icon = 'firefox' }) })
+
   mymainmenu = awful.menu.new({ items = menu_items, width = 150 })
 
   mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
