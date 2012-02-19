@@ -50,15 +50,11 @@ layouts =
 -- Define a tag table which hold all screen tags.
 if screen.count() == 1 then
   -- single monitor stuff
-  tags = { 
-    names = { "main", "mail", "im", "chat", 5, 6, 7, 8, 9 },
+  tags = {
+    names = { "main", "mail", "im", "chat", "music", 6, 7, 8, 9 },
   }
   -- Each screen has its own tag table.
   tags[1] = awful.tag(tags.names, 1, layouts[1])
-  tags.main = tags[1][1]
-  tags.mail = tags[1][2]
-  tags.im = tags[1][3]
-  tags.chat = tags[1][4]
 else
   main_screen = 2
   status_screen = 1
@@ -70,18 +66,20 @@ else
   -- multi monitor stuff
   tags = {}
   -- set "status" screen
-  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", 5, 6, 7, 8, 9 }, status_screen, layouts[1])
+  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", 6, 7, 8, 9 }, status_screen, layouts[1])
   -- set "main" screen
   tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, 9 }, main_screen, layouts[1])
   for s = 3, screen.count() do
       -- Each screen has its own tag table.
       tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
   end
-  tags.main = tags[main_screen][1]
-  tags.mail = tags[status_screen][2]
-  tags.im = tags[status_screen][3]
-  tags.chat = tags[status_screen][4]
 end
+
+tags.main = tags[main_screen][1]
+tags.mail = tags[status_screen][2]
+tags.im = tags[status_screen][3]
+tags.chat = tags[status_screen][4]
+tags.music = tags[status_screen][5]
 -- }}}
 
 -- {{{ Menu
