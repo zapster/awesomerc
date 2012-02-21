@@ -131,6 +131,12 @@ tags.music = tags[status_screen][5]
 
   table.insert(menu_items, { "Browser", mybrowsermenu, freedesktop.utils.lookup_icon({ icon = 'firefox' }) })
 
+  local mypanel = {}
+  mypanel.menu_dirs = {"/home/zapster/.gnome2/panel2.d/default/launchers"}
+  mypanelmenu = freedesktop.menu.new(mypanel)
+
+  table.insert(menu_items, { "Panel", mypanelmenu, freedesktop.utils.lookup_icon({ icon = 'gtk-paste' }) })
+
   mymainmenu = awful.menu.new({ items = menu_items, width = 150 })
 
   mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
