@@ -542,8 +542,21 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
+    -- Gimp tuning
     { rule = { class = "Gimp" },
-      properties = { floating = false, tags.gimp } },
+      properties = { floating = false, tag = tags.gimp } },
+      -- main window
+    { rule = { class = "Gimp", role = "gimp-image-window" },
+      properties = { },
+      callback = awful.client.setmaster },
+      -- toolbox
+    { rule = { class = "Gimp", role = "gimp-toolbox" },
+      properties = { },
+      callback = awful.client.setslave },
+      -- dock (e.g. layers)
+    { rule = { class = "Gimp", role = "gimp-dock" },
+      properties = { },
+      callback = awful.client.setslave },
     -- set IM's to im tag
     { rule = { class = "Skype" },
       properties = { tag = tags.im } },
