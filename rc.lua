@@ -54,7 +54,7 @@ status_screen = 1
 if screen.count() == 1 then
   -- single monitor stuff
   tags = {
-    names = { "main", "mail", "im", "chat", "music", 6, 7, 8, 9 },
+    names = { "main", "mail", "im", "chat", "music", "gimp", 7, 8, 9 },
   }
   -- Each screen has its own tag table.
   tags[1] = awful.tag(tags.names, 1, layouts[1])
@@ -69,7 +69,7 @@ else
   -- multi monitor stuff
   tags = {}
   -- set "status" screen
-  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", 6, 7, 8, 9 }, status_screen, layouts[1])
+  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", "gimp", 7, 8, 9 }, status_screen, layouts[1])
   -- set "main" screen
   tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, 9 }, main_screen, layouts[1])
   for s = 3, screen.count() do
@@ -83,6 +83,7 @@ tags.mail = tags[status_screen][2]
 tags.im = tags[status_screen][3]
 tags.chat = tags[status_screen][4]
 tags.music = tags[status_screen][5]
+tags.gimp = tags[status_screen][6]
 -- }}}
 
 -- {{{ Menu
@@ -493,6 +494,11 @@ globalkeys = awful.util.table.join(globalkeys,
             awful.tag.viewonly(tags.music);
             awful.screen.focus(tags.music.screen)
         end),
+    awful.key({ modkey }, "F6",
+        function ()
+            awful.tag.viewonly(tags.gimp);
+            awful.screen.focus(tags.gimp.screen)
+        end),
     -- move clients to screen
     awful.key({ modkey, "Shift" }, "F1",
         function ()
@@ -513,6 +519,10 @@ globalkeys = awful.util.table.join(globalkeys,
     awful.key({ modkey, "Shift" }, "F5",
         function ()
             awful.client.movetotag(tags.music);
+        end),
+    awful.key({ modkey, "Shift" }, "F6",
+        function ()
+            awful.client.movetotag(tags.gimp);
         end)
 )
 -- Set keys
