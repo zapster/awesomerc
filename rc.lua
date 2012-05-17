@@ -562,6 +562,11 @@ awful.rules.rules = {
       properties = { tag = tags.im } },
     { rule = { class = "Empathy" },
       properties = { tag = tags.im } },
+      -- class Empathy problem -> workaround
+    { rule = { role = "contact_list" },
+      properties = { tag = tags.im } },
+    { rule = { role = "chat" },
+      properties = { tag = tags.im } },
     -- email
     { rule = { class = "Thunderbird" },
       properties = { tag = tags.mail } },
@@ -607,5 +612,4 @@ end)
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
 
