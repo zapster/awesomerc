@@ -664,6 +664,21 @@ awful.rules.rules = {
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
+    -- work
+    { rule = { class = "Thg" },
+      properties = { tag = tags.thg } },
+    { rule = { class = "Eclipse" },
+      properties = { tag = tags.eclipse } },
+    { rule = { class = "IdealGraphVisualizer" },
+      properties = { tag = tags.igv } },
+    { rule = { class = "Java HotSpot Client Compiler Visualizer" },
+      properties = { tag = tags.c1vis } },
+    { rule = { name = "Eclipse" },
+      properties = { tag = tags.eclipse } },
+    { rule = { name = "Starting IdealGraphVisualizer" },
+      properties = { tag = tags.igv } },
+    { rule = { name = "Starting Java HotSpot Client Compiler Visualizer" },
+      properties = { tag = tags.c1vis } },
 }
 -- }}}
 
