@@ -58,6 +58,7 @@ if screen.count() == 1 then
   }
   -- Each screen has its own tag table.
   tags[1] = awful.tag(tags.names, 1, layouts[1])
+  tags.gimp = tags[main_screen][6]
 else
   main_screen = 2
   status_screen = 1
@@ -69,13 +70,14 @@ else
   -- multi monitor stuff
   tags = {}
   -- set "status" screen
-  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", "gimp", 7, 8, 9 }, status_screen, layouts[1])
+  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", 6, 7, 8, 9 }, status_screen, layouts[1])
   -- set "main" screen
-  tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, 9 }, main_screen, layouts[1])
+  tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, "gimp" }, main_screen, layouts[1])
   for s = 3, screen.count() do
       -- Each screen has its own tag table.
       tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
   end
+  tags.gimp = tags[main_screen][9]
 end
 
 tags.main = tags[main_screen][1]
@@ -83,7 +85,6 @@ tags.mail = tags[status_screen][2]
 tags.im = tags[status_screen][3]
 tags.chat = tags[status_screen][4]
 tags.music = tags[status_screen][5]
-tags.gimp = tags[status_screen][6]
 -- }}}
 
 -- {{{ Menu
@@ -126,10 +127,17 @@ tags.gimp = tags[status_screen][6]
 
   mybrowsermenu = {
     { "firefox default", "firefox -P default -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
+    { "firefox JKU", "firefox -P JKU -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
     { "firefox uni", "firefox -P uni -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
     { "firefox epicopt", "firefox -P epicopt -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
+    { "firefox stonepinecircle", "firefox -P stonepinecircle -no-remote", freedesktop.utils.lookup_icon({ icon = 'firefox' })  },
+  }
+  mymailmenu = {
+    { "thunderbird default", "thunderbird -P default -no-remote", freedesktop.utils.lookup_icon({ icon = 'thunderbird' })  },
+    { "thunderbird JKU", "thunderbird -P JKU -no-remote", freedesktop.utils.lookup_icon({ icon = 'thunderbird' })  },
   }
 
+  table.insert(menu_items, { "E-Mail", mymailmenu, freedesktop.utils.lookup_icon({ icon = 'thunderbird' }) })
   table.insert(menu_items, { "Browser", mybrowsermenu, freedesktop.utils.lookup_icon({ icon = 'firefox' }) })
 
   local mypanel = {}
@@ -408,7 +416,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
     -- BEGIN Zap specific
-    awful.key({ altkey,           }, "F4",     function (c) c:kill()                         end),
+    --awful.key({ altkey,           }, "F4",     function (c) c:kill()                         end),
     -- END Zap specific
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
@@ -525,6 +533,13 @@ globalkeys = awful.util.table.join(globalkeys,
             awful.client.movetotag(tags.gimp);
         end)
 )
+-- Bind CTRL+ALT L to lock screen
+globalkeys = awful.util.table.join(globalkeys,
+    awful.key({ "Control", "Mod1" }, "l",
+        function ()
+            awful.util.spawn("xscreensaver-command -lock")
+        end)
+)
 -- Set keys
 root.keys(globalkeys)
 -- }}}
@@ -544,20 +559,23 @@ awful.rules.rules = {
       properties = { floating = true } },
     -- Gimp tuning
     { rule = { class = "Gimp" },
-      properties = { floating = false, tag = tags.gimp } },
+      properties = { floating = false, tag = tags.gimp },
+      callback = awful.client.setslave },
       -- main window
     { rule = { class = "Gimp", role = "gimp-image-window" },
       properties = { },
       callback = awful.client.setmaster },
       -- toolbox
-    { rule = { class = "Gimp", role = "gimp-toolbox" },
-      properties = { },
-      callback = awful.client.setslave },
+    --{ rule = { class = "Gimp", role = "gimp-toolbox" },
+    --  properties = { },
+    --  callback = awful.client.setslave },
       -- dock (e.g. layers)
-    { rule = { class = "Gimp", role = "gimp-dock" },
-      properties = { },
-      callback = awful.client.setslave },
+    --{ rule = { class = "Gimp", role = "gimp-dock" },
+    --  properties = { },
+    --  callback = awful.client.setslave },
     -- set IM's to im tag
+    { rule = { class = "Pidgin" },
+      properties = { tag = tags.im } },
     { rule = { class = "Skype" },
       properties = { tag = tags.im } },
     { rule = { class = "Empathy" },
@@ -579,6 +597,9 @@ awful.rules.rules = {
     -- nvidia settings
     { rule = { class = "Nvidia-settings" },
       properties = { floating = false, tag = tags.main } },
+    -- flash fullscreen settings
+    { rule = { class = "Plugin-container" },
+      properties = { fullscreen = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -616,4 +637,5 @@ client.add_signal("focus", function(c) c.border_color = beautiful.border_focus e
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
-awful.util.spawn_with_shell("/home/zapster/usr/local/bin/dex -a")
+awful.util.spawn_with_shell("/home/zapster/usr/local/bin/dex -a -e awesome")
+--awful.util.spawn("nm-applet &")
