@@ -54,7 +54,7 @@ status_screen = 1
 if screen.count() == 1 then
   -- single monitor stuff
   tags = {
-    names = { "main", "mail", "im", "chat", "music", "gimp", 7, 8, 9, "thg", "eclipse", "graal", "igv", "c1vis", "F12"},
+    names = { "main", "mail", "im", "chat", "music", "gimp", 7, 8, 9, "eclipse", "graal", "thg", "igv", "c1vis", "F12"},
   }
   -- Each screen has its own tag table.
   tags[1] = awful.tag(tags.names, 1, layouts[1])
@@ -72,7 +72,7 @@ else
   -- set "status" screen
   tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", 6, 7, 8, 9 }, status_screen, layouts[1])
   -- set "main" screen
-  tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, "gimp", "thg", "eclipse", "graal", "igv", "c1vis", "F12" }, main_screen, layouts[1])
+  tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, "gimp", "eclipse", "graal", "thg", "igv", "c1vis", "F12" }, main_screen, layouts[1])
   for s = 3, screen.count() do
       -- Each screen has its own tag table.
       tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
@@ -85,9 +85,9 @@ tags.mail = tags[status_screen][2]
 tags.im = tags[status_screen][3]
 tags.chat = tags[status_screen][4]
 tags.music = tags[status_screen][5]
-tags.thg = tags[main_screen][10]
-tags.eclipse = tags[main_screen][11]
-tags.graal = tags[main_screen][12]
+tags.eclipse = tags[main_screen][10]
+tags.graal = tags[main_screen][11]
+tags.thg = tags[main_screen][12]
 tags.igv = tags[main_screen][13]
 tags.c1vis = tags[main_screen][14]
 tags.F12 = tags[main_screen][15]
@@ -516,18 +516,18 @@ globalkeys = awful.util.table.join(globalkeys,
     -- work related
     awful.key({ modkey }, "F7",
         function ()
-            awful.tag.viewonly(tags.thg);
-            awful.screen.focus(tags.thg.screen)
-        end),
-    awful.key({ modkey }, "F8",
-        function ()
             awful.tag.viewonly(tags.eclipse);
             awful.screen.focus(tags.eclipse.screen)
         end),
-    awful.key({ modkey }, "F9",
+    awful.key({ modkey }, "F8",
         function ()
             awful.tag.viewonly(tags.graal);
             awful.screen.focus(tags.graal.screen)
+        end),
+    awful.key({ modkey }, "F9",
+        function ()
+            awful.tag.viewonly(tags.thg);
+            awful.screen.focus(tags.thg.screen)
         end),
     awful.key({ modkey }, "F10",
         function ()
@@ -546,15 +546,15 @@ globalkeys = awful.util.table.join(globalkeys,
         end),
     awful.key({ modkey, "Shift" }, "F7",
         function ()
-            awful.client.movetotag(tags.thg);
+            awful.client.movetotag(tags.eclipse);
         end),
     awful.key({ modkey, "Shift" }, "F8",
         function ()
-            awful.client.movetotag(tags.eclipse);
+            awful.client.movetotag(tags.graal);
         end),
     awful.key({ modkey, "Shift" }, "F9",
         function ()
-            awful.client.movetotag(tags.graal);
+            awful.client.movetotag(tags.thg);
         end),
     awful.key({ modkey, "Shift" }, "F10",
         function ()
