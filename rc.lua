@@ -41,7 +41,7 @@ end
 beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "xterm"
+terminal = "urxvt256c"
 editor = os.getenv("EDITOR") or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -51,22 +51,24 @@ editor_cmd = terminal .. " -e " .. editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
 {
-    awful.layout.suit.floating,
+--    awful.layout.suit.floating,
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
+--    awful.layout.suit.tile.left,
     awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier
+--    awful.layout.suit.tile.top,
+--    awful.layout.suit.fair,
+--    awful.layout.suit.fair.horizontal,
+--    awful.layout.suit.spiral,
+--    awful.layout.suit.spiral.dwindle,
+--    awful.layout.suit.max,
+--    awful.layout.suit.max.fullscreen,
+--    awful.layout.suit.magnifier
+    awful.layout.suit.max
 }
 -- }}}
 
@@ -80,11 +82,49 @@ end
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
-for s = 1, screen.count() do
-    -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+main_screen = 1
+status_screen = 1
+
+if screen.count() == 1 then
+  -- single monitor stuff
+  tags = {
+    names = { "main", "mail", "im", "chat", "music", "gimp", 7, 8, 9, "eclipse", "graal", "thg", "igv", "c1vis", "F12"},
+  }
+  -- Each screen has its own tag table.
+  tags[1] = awful.tag(tags.names, 1, layouts[1])
+  tags.gimp = tags[main_screen][6]
+else
+  main_screen = 2
+  status_screen = 1
+
+  if screen[1].workarea.width > screen[2].workarea.width then
+    main_screen = 1
+    status_screen = 2
+  end
+  -- multi monitor stuff
+  tags = {}
+  -- set "status" screen
+  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", 6, 7, 8, 9 }, status_screen, layouts[1])
+  -- set "main" screen
+  tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, "gimp", "eclipse", "graal", "thg", "igv", "c1vis", "F12" }, main_screen, layouts[1])
+  for s = 3, screen.count() do
+      -- Each screen has its own tag table.
+      tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+  end
+  tags.gimp = tags[main_screen][9]
 end
+
+tags.main = tags[main_screen][1]
+tags.mail = tags[status_screen][2]
+tags.im = tags[status_screen][3]
+tags.chat = tags[status_screen][4]
+tags.music = tags[status_screen][5]
+tags.eclipse = tags[main_screen][10]
+tags.graal = tags[main_screen][11]
+tags.thg = tags[main_screen][12]
+tags.igv = tags[main_screen][13]
+tags.c1vis = tags[main_screen][14]
+tags.F12 = tags[main_screen][15]
 -- }}}
 
 -- {{{ Menu
@@ -344,6 +384,126 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
+-- Bind F# keys to the special purpose tags
+globalkeys = awful.util.table.join(globalkeys,
+    awful.key({ modkey }, "F1",
+        function ()
+            awful.tag.viewonly(tags.main);
+            awful.screen.focus(awful.tag.getscreen(tags.main))
+        end),
+    awful.key({ modkey }, "F2",
+        function ()
+            awful.tag.viewonly(tags.mail);
+            awful.screen.focus(awful.tag.getscreen(tags.mail))
+        end),
+    awful.key({ modkey }, "F3",
+        function ()
+            awful.tag.viewonly(tags.im);
+            awful.screen.focus(awful.tag.getscreen(tags.im))
+        end),
+    awful.key({ modkey }, "F4",
+        function ()
+            awful.tag.viewonly(tags.chat);
+            awful.screen.focus(awful.tag.getscreen(tags.chat))
+        end),
+    awful.key({ modkey }, "F5",
+        function ()
+            awful.tag.viewonly(tags.music);
+            awful.screen.focus(awful.tag.getscreen(tags.music))
+        end),
+    awful.key({ modkey }, "F6",
+        function ()
+            awful.tag.viewonly(tags.gimp);
+            awful.screen.focus(awful.tag.getscreen(tags.gimp))
+        end),
+    -- work related
+    awful.key({ modkey }, "F7",
+        function ()
+            awful.tag.viewonly(tags.eclipse);
+            awful.screen.focus(awful.tag.getscreen(tags.eclipse))
+        end),
+    awful.key({ modkey }, "F8",
+        function ()
+            awful.tag.viewonly(tags.graal);
+            awful.screen.focus(awful.tag.getscreen(tags.graal))
+        end),
+    awful.key({ modkey }, "F9",
+        function ()
+            awful.tag.viewonly(tags.thg);
+            awful.screen.focus(awful.tag.getscreen(tags.thg))
+        end),
+    awful.key({ modkey }, "F10",
+        function ()
+            awful.tag.viewonly(tags.igv);
+            awful.screen.focus(awful.tag.getscreen(tags.igv))
+        end),
+    awful.key({ modkey }, "F11",
+        function ()
+            awful.tag.viewonly(tags.c1vis);
+            awful.screen.focus(awful.tag.getscreen(tags.c1vis))
+        end),
+    awful.key({ modkey }, "F12",
+        function ()
+            awful.tag.viewonly(tags.F12);
+            awful.screen.focus(awful.tag.getscreen(tags.F12))
+        end),
+    awful.key({ modkey, "Shift" }, "F7",
+        function ()
+            awful.client.movetotag(tags.eclipse);
+        end),
+    awful.key({ modkey, "Shift" }, "F8",
+        function ()
+            awful.client.movetotag(tags.graal);
+        end),
+    awful.key({ modkey, "Shift" }, "F9",
+        function ()
+            awful.client.movetotag(tags.thg);
+        end),
+    awful.key({ modkey, "Shift" }, "F10",
+        function ()
+            awful.client.movetotag(tags.igv);
+        end),
+    awful.key({ modkey, "Shift" }, "F11",
+        function ()
+            awful.client.movetotag(tags.c1vis);
+        end),
+    awful.key({ modkey, "Shift" }, "F12",
+        function ()
+            awful.client.movetotag(tags.F12);
+        end),
+    -- move clients to screen
+    awful.key({ modkey, "Shift" }, "F1",
+        function ()
+            awful.client.movetotag(tags.main);
+        end),
+    awful.key({ modkey, "Shift" }, "F2",
+        function ()
+            awful.client.movetotag(tags.mail);
+        end),
+    awful.key({ modkey, "Shift" }, "F3",
+        function ()
+            awful.client.movetotag(tags.im);
+        end),
+    awful.key({ modkey, "Shift" }, "F4",
+        function ()
+            awful.client.movetotag(tags.chat);
+        end),
+    awful.key({ modkey, "Shift" }, "F5",
+        function ()
+            awful.client.movetotag(tags.music);
+        end),
+    awful.key({ modkey, "Shift" }, "F6",
+        function ()
+            awful.client.movetotag(tags.gimp);
+        end)
+)
+-- Bind CTRL+ALT L to lock screen
+--globalkeys = awful.util.table.join(globalkeys,
+--    awful.key({ "Control", "Mod1" }, "l",
+--        function ()
+--            awful.util.spawn("xscreensaver-command -lock")
+--        end)
+--)
 -- Set keys
 root.keys(globalkeys)
 -- }}}
