@@ -101,10 +101,17 @@ else
     main_screen = 1
     status_screen = 2
   end
+  if screen[status_screen].workarea.height > screen[status_screen].workarea.width then
+    -- portrait
+    status_layout_index = 2
+  else
+    -- landscape
+    status_layout_index = 1
+  end
   -- multi monitor stuff
   tags = {}
   -- set "status" screen
-  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", 6, 7, 8, 9 }, status_screen, layouts[1])
+  tags[status_screen] = awful.tag({ 1, "mail", "im", "chat", "music", 6, 7, 8, 9 }, status_screen, layouts[status_layout_index])
   -- set "main" screen
   tags[main_screen] = awful.tag({ "main", 2, 3, 4, 5, 6, 7, 8, "gimp", "eclipse", "graal", "thg", "igv", "c1vis", "F12" }, main_screen, layouts[1])
   for s = 3, screen.count() do
