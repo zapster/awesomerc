@@ -328,6 +328,12 @@ globalkeys = gears.table.join(
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
 
+    awful.key({ altkey }, "space",
+            function ()
+                awful.spawn("xfce4-appfinder --disable-server")
+            end,
+              {description = "run launcher", group = "launcher"}),
+
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run {
@@ -484,6 +490,7 @@ awful.rules.rules = {
           "Wpa_gui",
           "pinentry",
           "veromix",
+          "Xfce4-appfinder",
           "xtightvncviewer"},
 
         name = {
@@ -491,7 +498,7 @@ awful.rules.rules = {
         },
         role = {
           "AlarmWindow",  -- Thunderbird's calendar.
-          "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
+          --"pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
         }
       }, properties = { floating = true }},
 
