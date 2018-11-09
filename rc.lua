@@ -180,15 +180,20 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+primary_screen = 1
+secondary_screen = 1
+
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
     if s.workarea.height > s.workarea.width then
       -- portrait
       status_layout_index = 2
+      secondary_screen = s
     else
       -- landscape
       status_layout_index = 1
+      primary_screen = s
     end
 
     -- Each screen has its own tag table.
@@ -507,9 +512,19 @@ awful.rules.rules = {
       }, properties = { titlebars_enabled = false }
     },
 
+    { rule = { name = "WhatsApp" },
+      properties = { screen = secondary_screen, tag = "9" } },
+    { rule = { class = "Thunderbird" },
+      properties = { screen = secondary_screen, tag = "2" } },
+    { rule = { class = "Slack" },
+      properties = { screen = secondary_screen, tag = "3" } },
+    { rule = { class = "jetbrains-idea-ce" },
+      properties = { screen = primary_screen, tag = "8" } },
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
+    ---{ rule = { class = "jetbrains-idea-ce" },
+    ---  properties = { maximized = false } },
 }
 -- }}}
 
