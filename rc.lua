@@ -450,7 +450,8 @@ for i = 1, 9 do
         -- Bind CTRL+ALT L to lock screen
         awful.key({ "Control", "Mod1" }, "l",
             function ()
-                awful.spawn("xscreensaver-command --lock")
+                 -- awful.spawn("xscreensaver-command --lock")
+                awful.spawn("i3lock -c 000000")
             end)
     )
 end
