@@ -1,0 +1,4 @@
+st
+i3lock
+xautolock
+xfce4-appfinder
