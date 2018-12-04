@@ -451,7 +451,9 @@ for i = 1, 9 do
         awful.key({ "Control", "Mod1" }, "l",
             function ()
                  -- awful.spawn("xscreensaver-command --lock")
-                awful.spawn("i3lock -c 000000")
+                -- awful.spawn("i3lock -c 000000")
+                awful.util.spawn("sync")
+                awful.util.spawn("xautolock -locknow")
             end)
     )
 end
@@ -596,4 +598,5 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+awful.util.spawn_with_shell('~/.config/awesome/locker.sh')
 -- }}}
