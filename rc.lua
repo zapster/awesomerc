@@ -183,11 +183,6 @@ screen.connect_signal("property::geometry", set_wallpaper)
 primary_screen = 1
 secondary_screen = 1
 
--- properly initialize screens
-awful.screen.connect_for_each_screen(function(s)
-  primary_screen = s
-  secondary_screen = s
-end)
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
