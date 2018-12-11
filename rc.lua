@@ -521,8 +521,8 @@ awful.rules.rules = {
       properties = { screen = secondary_screen, tag = "2" } },
     { rule = { class = "Slack" },
       properties = { screen = secondary_screen, tag = "3" } },
-    { rule = { class = "jetbrains-idea-ce" },
-      properties = { screen = primary_screen, tag = "8" } },
+    --{ rule = { class = "jetbrains-idea-ce" },
+    --  properties = { screen = primary_screen, tag = "8" } },
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
